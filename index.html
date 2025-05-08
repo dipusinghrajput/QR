@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burr Working - Order</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>KARAWAS CAFE- Order</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         .menu-item-card {
             transition: transform 0.2s;
@@ -70,7 +70,7 @@
                     </div>
                     <div class="d-flex justify-content-between fw-bold mb-3">
                         <span>Total:</span>
-                        <span id="cart-total">$0.00</span>
+                        <span id="cart-total">₹0.00</span>
                     </div>
                     <button id="place-order-btn" class="btn btn-primary w-100" disabled>
                         Place Order
@@ -112,26 +112,25 @@
     <script>
         // Initialize Firebase
         const firebaseConfig = {
-  apiKey: "AIzaSyAo-CwTsTKjUBfDr6tISZFjrRvl0NIEm6Q",
-  authDomain: "test-f413b.firebaseapp.com",
-  databaseURL: "https://test-f413b-default-rtdb.firebaseio.com",
-  projectId: "test-f413b",
-  storageBucket: "test-f413b.firebasestorage.app",
-  messagingSenderId: "663826802981",
-  appId: "1:663826802981:web:6e952c83da05c4a61dd2cc",
-  measurementId: "G-SD1Y0R0C7V"
-};
+            apiKey: "AIzaSyAo-CwTsTKjUBfDr6tISZFjrRvl0NIEm6Q",
+            authDomain: "test-f413b.firebaseapp.com",
+            databaseURL: "https://test-f413b-default-rtdb.firebaseio.com",
+            projectId: "test-f413b",
+            storageBucket: "test-f413b.firebasestorage.app",
+            messagingSenderId: "663826802981",
+            appId: "1:663826802981:web:6e952c83da05c4a61dd2cc",
+            measurementId: "G-SD1Y0R0C7V"
+        };
 
-        
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        
+
         // Get table number from URL
         const urlParams = new URLSearchParams(window.location.search);
         const tableNumber = urlParams.get('table') || '0';
         document.getElementById('table-number').textContent = tableNumber;
         document.getElementById('confirmation-table').textContent = tableNumber;
-        
+
         // Menu data (could also be loaded from Firebase)
         const menuData = {
             "Coffee": [
@@ -149,39 +148,39 @@
                 { id: "s2", name: "Tropical Green", price: 6.50, description: "Spinach, mango, and pineapple" }
             ]
         };
-        
+
         // Cart state
         let cart = [];
         let orderNumber = 0;
-        
+
         // Initialize the menu
         function initMenu() {
             const menuContainer = document.getElementById('menu-container');
             menuContainer.innerHTML = '';
-            
+
             for (const [category, items] of Object.entries(menuData)) {
                 // Add category title
                 const categoryTitle = document.createElement('h3');
                 categoryTitle.className = 'category-title';
                 categoryTitle.textContent = category;
                 menuContainer.appendChild(categoryTitle);
-                
+
                 // Create row for items
                 const row = document.createElement('div');
                 row.className = 'row row-cols-1 row-cols-md-2 g-4 mb-4';
-                
+
                 // Add items
                 items.forEach(item => {
                     const col = document.createElement('div');
                     col.className = 'col';
-                    
+
                     col.innerHTML = `
                         <div class="card menu-item-card h-100" onclick="addToCart('${item.id}')">
                             <div class="card-body">
                                 <h5 class="card-title">${item.name}</h5>
                                 <p class="card-text text-muted">${item.description}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold text-primary">$${item.price.toFixed(2)}</span>
+                                    <span class="fw-bold text-primary">₹${item.price.toFixed(2)}</span>
                                     <button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation();addToCart('${item.id}')">
                                         Add +
                                     </button>
@@ -189,14 +188,14 @@
                             </div>
                         </div>
                     `;
-                    
+
                     row.appendChild(col);
                 });
-                
+
                 menuContainer.appendChild(row);
             }
         }
-        
+
         // Add item to cart
         function addToCart(itemId) {
             // Find the item in menu data
@@ -208,12 +207,12 @@
                     break;
                 }
             }
-            
+
             if (!item) return;
-            
+
             // Check if item already in cart
             const existingItem = cart.find(i => i.id === item.id);
-            
+
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
@@ -222,32 +221,32 @@
                     quantity: 1
                 });
             }
-            
+
             updateCartDisplay();
         }
-        
+
         // Update cart quantity
         function updateQuantity(itemId, change) {
             const itemIndex = cart.findIndex(i => i.id === itemId);
             if (itemIndex === -1) return;
-            
+
             const newQuantity = cart[itemIndex].quantity + change;
-            
+
             if (newQuantity < 1) {
                 cart.splice(itemIndex, 1);
             } else {
                 cart[itemIndex].quantity = newQuantity;
             }
-            
+
             updateCartDisplay();
         }
-        
+
         // Update cart UI
         function updateCartDisplay() {
             const cartItemsElement = document.getElementById('cart-items');
             const placeOrderBtn = document.getElementById('place-order-btn');
             const cartTotalElement = document.getElementById('cart-total');
-            
+
             // Update items list
             if (cart.length === 0) {
                 cartItemsElement.innerHTML = '<p class="text-muted">Your cart is empty</p>';
@@ -255,16 +254,16 @@
             } else {
                 let itemsHTML = '';
                 let total = 0;
-                
+
                 cart.forEach(item => {
                     total += item.price * item.quantity;
-                    
+
                     itemsHTML += `
                         <div class="cart-item">
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <strong>${item.name}</strong>
-                                    <div class="text-muted">$${item.price.toFixed(2)} × ${item.quantity}</div>
+                                    <div class="text-muted">₹${item.price.toFixed(2)} × ${item.quantity}</div>
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <button class="btn btn-sm btn-outline-secondary me-2" onclick="updateQuantity('${item.id}', -1)">
@@ -279,35 +278,35 @@
                         </div>
                     `;
                 });
-                
+
                 cartItemsElement.innerHTML = itemsHTML;
-                cartTotalElement.textContent = `$${total.toFixed(2)}`;
+                cartTotalElement.textContent = `₹${total.toFixed(2)}`;
                 placeOrderBtn.disabled = false;
             }
         }
-        
+
         // Place order
         document.getElementById('place-order-btn').addEventListener('click', function() {
             if (cart.length === 0) return;
-            
+
             // Generate order number (timestamp)
             orderNumber = Date.now();
             document.getElementById('order-number').textContent = orderNumber;
-            
+
             // Prepare order summary
             let orderSummaryHTML = '<ul class="list-unstyled">';
             let total = 0;
-            
+
             cart.forEach(item => {
                 total += item.price * item.quantity;
                 orderSummaryHTML += `
-                    <li>${item.quantity} × ${item.name} - $${(item.price * item.quantity).toFixed(2)}</li>
+                    <li>${item.quantity} × ${item.name} - ₹${(item.price * item.quantity).toFixed(2)}</li>
                 `;
             });
-            
-            orderSummaryHTML += `</ul><hr><p class="fw-bold">Total: $${total.toFixed(2)}</p>`;
+
+            orderSummaryHTML += `</ul><hr><p class="fw-bold">Total: ₹${total.toFixed(2)}</p>`;
             document.getElementById('order-summary').innerHTML = orderSummaryHTML;
-            
+
             // Create order object
             const order = {
                 table: tableNumber,
@@ -322,7 +321,7 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP,
                 orderNumber: orderNumber
             };
-            
+
             // Save to Firebase
             const newOrderRef = database.ref('orders/').push();
             newOrderRef.set(order)
@@ -330,7 +329,7 @@
                     // Show confirmation modal
                     const modal = new bootstrap.Modal(document.getElementById('orderConfirmationModal'));
                     modal.show();
-                    
+
                     // Clear cart
                     cart = [];
                     updateCartDisplay();
@@ -340,7 +339,7 @@
                     alert("There was an error placing your order. Please try again.");
                 });
         });
-        
+
         // Initialize the app
         initMenu();
     </script>
